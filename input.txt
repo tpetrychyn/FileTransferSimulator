@@ -1,0 +1,80 @@
+Program
+
+$$
+$$ This program reads a series of words, each of which 
+$$ has an associated page number.  The words are then
+$$ sorted so that they can be printed in alphabetical
+$$ order, each with a list of page numbers associated
+$$ with it.  Each word is printed only once, but all
+$$ page numbers associated with each occurrence of the
+$$ word will be printed.  Duplicate page numbers in the
+$$ input will be duplicated in the output file as well.
+$$
+
+Procedure Main
+   Integer N ;
+
+   Read N ;
+   Sort ( N ) ;
+End_Procedure ;
+
+$$
+$$ This sort routine does all the work.  It reads, sorts,
+$$ and prints the words.
+$$ A simple selection sort is used.  Names are printed as
+$$ they are sorted.
+$$
+
+Procedure Sort ( Integer N )
+   Array ( N ) Of String Name ;
+   Array ( N ) Of String Page ;
+   String First , Pagelist ;
+   Integer I , J ;
+   String Constant Large = " ZZ " , Very_Large = " ZZZ " ; 
+
+   I := 1 ;
+   Loop
+   While I <= N ;
+      Read Name ( I ) , Page ( I ) ;
+      I := I + 1 ;
+   End_Loop ;
+
+$$
+$$ Do the sort and print.
+$$
+
+   Loop
+      First := Large ;
+      I := 1 ;
+      J := 0 ;
+      Loop
+      While I <= N ;
+	 If Name ( I ) < First
+	 Then
+	    If J <> 0
+	    Then
+	       Name ( J ) := First ;
+	       Page ( J ) := Pagelist ;
+            End_If ;
+
+	    J := I ;
+	    First := Name ( I ) ;
+	    Name ( I ) := Very_Large ;
+	    Pagelist := Page ( I ) ;
+         Else
+	    If Name ( I ) = First
+	    Then
+	       Name ( I ) := Very_Large ;
+	       Pagelist := Pagelist & " , " & Page ( I ) ;
+            End_If ;
+         End_If ;
+	 I := I + 1 ;
+      End_Loop ;
+      Loop
+      While First <> Large ;
+	 Write First , Pagelist Using " S20 , X3 , S40 , N " ;
+      End_Loop ;
+   End_Loop ;
+End_Procedure ;
+
+End_Program
